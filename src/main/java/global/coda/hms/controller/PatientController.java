@@ -23,10 +23,20 @@ public class PatientController {
     public Patient getPatient(@RequestParam("id") int id) {
         return patientService.getPatient(id);
     }
+
     @PostMapping("/create")
     public int createPatient(@RequestBody Patient patient) {
         patient=patientService.createPatient(patient);
         return patient.getPkUserId();
     }
+    @PutMapping("/update")
+    public int updatePatient(@RequestBody Patient patient) {
+        patient=patientService.updatePatient(patient);
+        return patient.getPkUserId();
+    }
 
+    @DeleteMapping("/delete")
+    public boolean deletePatient(@RequestParam("id") int id) {
+        return patientService.deletePatient(id);
+    }
 }
