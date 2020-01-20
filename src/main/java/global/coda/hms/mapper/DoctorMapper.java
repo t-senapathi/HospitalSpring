@@ -1,6 +1,7 @@
 package global.coda.hms.mapper;
 
 import global.coda.hms.model.Doctor;
+import global.coda.hms.model.Patient;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -32,4 +33,16 @@ public interface DoctorMapper {
 
     @Update("update t_doctor SET doctor_specialisation=#{doctorSpecialisation},experience=#{experience} where fk_user_id=#{pkUserId} and is_deleted=0")
     int updateDoctor(Doctor doctor);
+
+    @Select("select pk_user_id,first_name,last_name,username,age,door_no,street,city,blood_group,patient_height,patient_weight from t_user join t_patient on t_user.pk_user_id = t_patient.fk_user_id join t_patient_doctor_mapping on t_patient_doctor_mapping.fk_patient_id = t_user.pk_user_id  where t_user.is_deleted =0 and t_patient.is_deleted=0 and t_patient_doctor_mapping.is_deleted=0 and t_patient_doctor_mapping.fk_doctor_id=#{id}")
+    List<Patient> getPatientUnderADoctor(int id);
+
+    @Select("<script>select pk_user_id,age,first_name,last_name,username,password,fk_role_id,doctor_specialisation,experience from t_user join t_doctor on t_user.pk_user_id = t_doctor.fk_user_id  where t_user.is_deleted=0 and t_doctor.is_deleted=0<if test='id!=0'>and pk_user_id=#{id}</if></script>")
+    @Results(value = {
+            @Result(property = "patientList", javaType = List.class, column = "pk_user_id",
+                    many = @Many(select = "getPatientUnderADoctor"))
+    })
+    List<Doctor> getAllPatientUnderAllDoctors(int id);
+
+
 }
