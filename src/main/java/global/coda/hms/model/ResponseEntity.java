@@ -10,12 +10,12 @@ public class ResponseEntity<T> {
    * The Status code.
    */
   private int statusCode;
+  private int requestId;
   /**
    * The Data.
    */
   private T data;
 
-  private int requestId;
 
   /**
    * Gets request id.
