@@ -3,13 +3,26 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
     id 'war'
+    id 'checkstyle'
 }
 
 group = 'global.coda'
 version = '0.0.1-SNAPSHOT'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '13'
-
+ext {
+    checkstyleVersion = '8.11'
+}
+checkstyle {
+    sourceSets = []
+    toolVersion = checkstyleVersion
+    config = rootProject.resources.text.fromFile('etc/checkstyle/rules.xml')
+}
+task checkstyle {
+    dependsOn 'checkstyleMain'
+    dependsOn 'checkstyleTest'
+    tasks.findByName('checkstyleTest').mustRunAfter 'checkstyleMain'
+}
 configurations {
     developmentOnly
     runtimeClasspath {
@@ -38,10 +51,17 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-//
-//    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-core'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.1'
     runtimeOnly 'mysql:mysql-connector-java'
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.2.5.RELEASE'
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
+
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
 
 }
 

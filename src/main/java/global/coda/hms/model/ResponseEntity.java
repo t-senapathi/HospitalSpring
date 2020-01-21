@@ -15,6 +15,25 @@ public class ResponseEntity<T> {
    */
   private T data;
 
+  private int requestId;
+
+  /**
+   * Gets request id.
+   *
+   * @return the request id
+   */
+  public int getRequestId() {
+    return requestId;
+  }
+
+  /**
+   * Sets request id.
+   *
+   * @param requestId the request id
+   */
+  public void setRequestId(int requestId) {
+    this.requestId = requestId;
+  }
 
   /**
    * Instantiates a new Response entity.
