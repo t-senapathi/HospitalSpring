@@ -18,6 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/doctor")
+@CrossOrigin
 public class DoctorController {
     /**
      * The Logger.

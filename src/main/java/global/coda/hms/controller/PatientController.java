@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/patients")
+@CrossOrigin
 public class PatientController {
     /**
      * The Logger.
