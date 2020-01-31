@@ -35,6 +35,7 @@ public class DoctorController {
      *
      * @return the all doctors
      */
+    @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<Doctor>> getAllDoctors() {
         LOGGER.traceEntry();
@@ -52,6 +53,7 @@ public class DoctorController {
      * @param id the id
      * @return the doctor
      */
+    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Doctor> getDoctor(@PathVariable int id) {
         LOGGER.entry(id);
@@ -69,12 +71,13 @@ public class DoctorController {
      * @param doctor the doctor
      * @return the response entity
      */
+    @CrossOrigin
     @PostMapping("/create")
-    public ResponseEntity<Integer> createDoctor(@RequestBody Doctor doctor) {
+    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) {
         LOGGER.entry(doctor);
-        ResponseEntity<Integer> responseEntity = new ResponseEntity<>();
+        ResponseEntity<Doctor> responseEntity = new ResponseEntity<>();
         doctor = doctorService.createDoctor(doctor);
-        responseEntity.setData(doctor.getPkUserId());
+        responseEntity.setData(doctor);
         responseEntity.setStatusCode(Response.SC_OK);
         LOGGER.traceExit(doctor);
         return responseEntity;
@@ -86,13 +89,14 @@ public class DoctorController {
      * @param doctor the doctor
      * @return the response entity
      */
+    @CrossOrigin
     @PutMapping("/update")
-    public ResponseEntity<Integer> updateDoctor(@RequestBody Doctor doctor) {
+    public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor) {
         LOGGER.entry(doctor);
-        ResponseEntity<Integer> responseEntity = new ResponseEntity<>();
+        ResponseEntity<Doctor> responseEntity = new ResponseEntity<>();
         doctor = doctorService.updateDoctor(doctor);
         responseEntity.setStatusCode(Response.SC_OK);
-        responseEntity.setData(doctor.getPkUserId());
+        responseEntity.setData(doctor);
         LOGGER.traceExit(doctor);
         return responseEntity;
     }
@@ -103,8 +107,9 @@ public class DoctorController {
      * @param id the id
      * @return the response entity
      */
-    @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteDoctor(@RequestParam("id") int id) {
+    @CrossOrigin
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteDoctor(@PathVariable int id) {
         LOGGER.entry(id);
         ResponseEntity<Boolean> responseEntity = new ResponseEntity<>();
         boolean result = doctorService.deleteDoctor(id);
@@ -120,6 +125,7 @@ public class DoctorController {
      * @param doctorId the doctor id
      * @return the patient under a doctor
      */
+    @CrossOrigin
     @GetMapping("/patients")
     public ResponseEntity<List<Doctor>> getPatientUnderADoctor(@PathParam("doctorId") Integer doctorId) {
         LOGGER.entry(doctorId);
