@@ -1,5 +1,7 @@
 package global.coda.hms.controller;
 
+import global.coda.hms.exception.BusinessException;
+import global.coda.hms.exception.SystemException;
 import global.coda.hms.model.Doctor;
 import global.coda.hms.model.ResponseEntity;
 import global.coda.hms.service.DoctorService;
@@ -52,10 +54,12 @@ public class DoctorController {
      *
      * @param id the id
      * @return the doctor
+     * @throws SystemException   the system exception
+     * @throws BusinessException the business exception
      */
     @CrossOrigin
     @GetMapping("/{id}")
-    public ResponseEntity<Doctor> getDoctor(@PathVariable int id) {
+    public ResponseEntity<Doctor> getDoctor(@PathVariable int id) throws SystemException, BusinessException {
         LOGGER.entry(id);
         ResponseEntity<Doctor> responseEntity = new ResponseEntity<>();
         Doctor doctor = doctorService.getDoctor(id);
@@ -70,10 +74,12 @@ public class DoctorController {
      *
      * @param doctor the doctor
      * @return the response entity
+     * @throws SystemException   the system exception
+     * @throws BusinessException the business exception
      */
     @CrossOrigin
     @PostMapping("/create")
-    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) {
+    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) throws SystemException, BusinessException{
         LOGGER.entry(doctor);
         ResponseEntity<Doctor> responseEntity = new ResponseEntity<>();
         doctor = doctorService.createDoctor(doctor);

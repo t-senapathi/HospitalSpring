@@ -1,11 +1,17 @@
 package global.coda.hms.service;
 
+import global.coda.hms.exception.BusinessException;
+import global.coda.hms.exception.SystemException;
+import global.coda.hms.exception.UserNotFoundException;
 import global.coda.hms.mapper.DoctorMapper;
 import global.coda.hms.model.Doctor;
-import global.coda.hms.model.Patient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import java.util.List;
 
@@ -18,11 +24,11 @@ public class DoctorService {
     /**
      * The Doctor mapper.
      */
-    DoctorMapper doctorMapper;
+    private DoctorMapper doctorMapper;
     /**
      * The Logger.
      */
-    Logger LOGGER = LogManager.getLogger(DoctorService.class);
+    private Logger LOGGER = LogManager.getLogger(DoctorService.class);
 
     /**
      * Instantiates a new Doctor service.
@@ -38,13 +44,22 @@ public class DoctorService {
      *
      * @param doctor the doctor
      * @return the doctor
+     * @throws BusinessException the business exception
+     * @throws SystemException   the system exception
      */
-    public Doctor createDoctor(Doctor doctor) {
-        LOGGER.entry(doctor);
-        doctorMapper.createUser(doctor);
-        doctorMapper.createDoctor(doctor);
-        LOGGER.traceExit(doctor);
-        return doctor;
+    public Doctor createDoctor(Doctor doctor) throws BusinessException, SystemException {
+        try {
+            LOGGER.entry(doctor);
+            doctorMapper.createUser(doctor);
+            doctorMapper.createDoctor(doctor);
+            LOGGER.traceExit(doctor);
+            return doctor;
+        } catch (DuplicateKeyException e) {
+            throw new BusinessException("Username already Exists");
+        }
+        catch (Exception e){
+            throw new SystemException(e);
+        }
     }
 
     /**
@@ -64,12 +79,23 @@ public class DoctorService {
      *
      * @param id the id
      * @return the doctor
+     * @throws BusinessException the business exception
+     * @throws SystemException   the system exception
      */
-    public Doctor getDoctor(int id) {
-        LOGGER.entry(id);
-        Doctor doctor = doctorMapper.getDoctor(id);
-        LOGGER.traceExit(doctor);
-        return doctor;
+    public Doctor getDoctor(int id) throws BusinessException, SystemException {
+        try {
+            LOGGER.entry(id);
+            Doctor doctor = doctorMapper.getDoctor(id);
+            if (doctor == null) {
+                throw new UserNotFoundException("NO Doctor Found for the given id");
+            }
+            LOGGER.traceExit(doctor);
+            return doctor;
+        } catch (UserNotFoundException e) {
+            throw new BusinessException(e);
+        } catch (Exception e) {
+            throw new SystemException(e);
+        }
     }
 
     /**

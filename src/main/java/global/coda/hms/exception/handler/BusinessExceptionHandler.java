@@ -14,10 +14,11 @@ public class BusinessExceptionHandler {
     /**
      * Handler response entity.
      *
+     * @param e the e
      * @return the response entity
      */
     @ExceptionHandler({BusinessException.class})
-    public ResponseEntity<?> handler() {
-        return new ResponseEntity<String>("Something went Wrong", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> handler(BusinessException e) {
+        return new ResponseEntity<String>("Business Exception:"+ e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

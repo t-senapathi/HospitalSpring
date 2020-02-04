@@ -4,6 +4,7 @@ import global.coda.hms.model.Doctor;
 import global.coda.hms.model.Patient;
 import org.apache.ibatis.annotations.*;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public interface DoctorMapper {
      *
      * @param doctor the doctor
      * @return the int
+     * @throws SQLIntegrityConstraintViolationException the sql integrity constraint violation exception
      */
     @Insert("INSERT INTO t_user (username,password,fk_role_id,first_name,last_name,age) VALUES (#{username},#{password}, 2, #{firstName}, #{lastName}, #{age})")
     @Options(useGeneratedKeys = true, keyProperty = "pkUserId", keyColumn = "pk_user_id")
@@ -44,6 +46,7 @@ public interface DoctorMapper {
      *
      * @param doctor the doctor
      * @return the int
+     * @throws SQLIntegrityConstraintViolationException the sql integrity constraint violation exception
      */
     @Insert("INSERT INTO t_doctor (fk_user_id,doctor_specialisation,experience) VALUES (#{pkUserId},#{doctorSpecialisation}, #{experience})")
     int createDoctor(Doctor doctor);
